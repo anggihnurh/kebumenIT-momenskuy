@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <!-- CUSTOM FONT USE GOOGLE FONTS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <title>Momenskuy</title>
+  </head>
+
+  <body>
+    <div class="container">
+      <div
+        id="avatar-container"
+        style="display: flex; flex-direction: column; align-items: center"
+      >
+        <input
+          type="file"
+          id="fileElem"
+          accept="image/*"
+          style="display: none"
+        />
+        <img
+          height="100"
+          src="https://media.istockphoto.com/vectors/missing-image-of-a-person-placeholder-vector-id1288129985?k=20&m=1288129985&s=612x612&w=0&h=OHfZHfKj0oqIDMl5f_oRqH13MHiB63nUmySYILbWbjE="
+          alt="avatar"
+          id="fileSelect"
+        />
+      </div>
+      <div id="header" class="fade-in-top">
+        <h1 id="clock"></h1>
+        <h1 id="name"></h1>
+      </div>
+      <div id="question-container" class="fade-in-top">
+        <h1 id="question"></h1>
+        <input
+          type="text"
+          name="name"
+          id="input"
+          onkeypress="onInputEnter(this)"
+        />
+      </div>
+      <div id="task-container" class="fade-in-top">
+        <h3 style="margin-bottom: 10px; text-align: center">
+          Fokusmu hari ini
+        </h3>
+        <div class="task">
+          <input type="checkbox" name="check" onchange="finishTask(this)" />
+          <p id="task-name"></p>
+          <button onclick="clearTask()">×</button>
+        </div>
+      </div>
+    </div>
+    <script>
+      const name = localStorage.getItem("name");
+      const task = localStorage.getItem("task");
+      const header = document.getElementById("header");
+      const qContainer = document.getElementById("question-container");
+      const question = document.getElementById("question");
+      const tContainer = document.getElementById("task-container");
+      const input = document.getElementById("input");
+      const taskEl = document.getElementById("task-name");
+
+      const clock = document.getElementById("clock");
+      function renderClock() {
+        const time = new Date().toLocaleTimeString("en-GB");
+        clock.innerHTML = time.slice(0, 5);
+      }
+
+      const timeInterval = setInterval(() => {
+        renderClock();
+        clock.setAttribute("class", "fade-in-top");
+      }, 1000);
+
+      document.getElementById("name").innerHTML = `Halo,  ${name}!` || "";
+
+      header.style.display = name ? "block" : "none";
+      tContainer.style.display = task ? "block" : "none";
+      qContainer.style.display = task ? "none" : "block";
+
+      question.innerHTML = name
+        ? "Apa prioritas kamu hari ini?"
+        : "Halo, siapa nama kamu?";
+
+      taskEl.innerHTML = task || "";
+
+      function onInputEnter(inputEl) {
+        const value = inputEl.value;
+        if (event.keyCode === 13) {
+          localStorage.setItem(name ? "task" : "name", value);
+          document.location.reload();
+        }
+      }
+
+      function finishTask(checkEl) {
+        const taskEl = document.getElementById("task-name");
+        taskEl.style.textDecoration = checkEl.checked ? "line-through" : "none";
+      }
+
+      function clearTask() {
+        localStorage.removeItem("task");
+        document.location.reload();
+      }
+
+      const fileSelect = document.getElementById("fileSelect");
+      const fileElem = document.getElementById("fileElem");
+      const avatar = document.getElementById("avatar");
+
+      fileSelect.addEventListener(
+        "click",
+        function (e) {
+          if (fileElem) {
+            fileElem.click();
+          }
+          e.preventDefault(); // prevent navigation to "#"
+        },
+        false
+      );
+
+      fileElem.addEventListener("change", handleFiles, false);
+
+      function handleFiles() {
+        if (!this?.files?.length) {
+          console.log("right here");
+        } else {
+          const url = URL.createObjectURL(this.files[0]);
+          fileSelect.src = url;
+          localStorage.setItem("avatar", url);
+          // document.location.reload();
+        }
+      }
+
+      const url = localStorage.getItem("avatar");
+      if (url) {
+        handleFiles();
+        fileSelect.src = url;
+      }
+    </script>
+  </body>
+</html>
