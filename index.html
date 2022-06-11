@@ -17,22 +17,44 @@
 
   <body>
     <div class="container">
-      <div id="header">
-        <h1 id="clock">12:00</h1>
-        <h1 id="name">Halo, Anggih Nur</h1>
+      <div
+        id="avatar-container"
+        style="display: flex; flex-direction: column; align-items: center"
+      >
+        <input
+          type="file"
+          id="fileElem"
+          accept="image/*"
+          style="display: none"
+        />
+        <img
+          height="100"
+          src="https://media.istockphoto.com/vectors/missing-image-of-a-person-placeholder-vector-id1288129985?k=20&m=1288129985&s=612x612&w=0&h=OHfZHfKj0oqIDMl5f_oRqH13MHiB63nUmySYILbWbjE="
+          alt="avatar"
+          id="fileSelect"
+        />
       </div>
-      <div id="question-container">
-        <h1 id="question">Apa prioritas kamu hari ini?</h1>
-        <input type="text" name="name" id="input" />
+      <div id="header" class="fade-in-top">
+        <h1 id="clock"></h1>
+        <h1 id="name"></h1>
       </div>
-      <div id="task-container">
+      <div id="question-container" class="fade-in-top">
+        <h1 id="question"></h1>
+        <input
+          type="text"
+          name="name"
+          id="input"
+          onkeypress="onInputEnter(this)"
+        />
+      </div>
+      <div id="task-container" class="fade-in-top">
         <h3 style="margin-bottom: 10px; text-align: center">
-          Prioritasmu hari ini
+          Fokusmu hari ini
         </h3>
         <div class="task">
-          <input type="checkbox" name="check" />
-          <p id="task-name">Belajar koding</p>
-          <button>×</button>
+          <input type="checkbox" name="check" onchange="finishTask(this)" />
+          <p id="task-name"></p>
+          <button onclick="clearTask()">×</button>
         </div>
       </div>
     </div>
